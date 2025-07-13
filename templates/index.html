@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sentiment Analysis</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="background-animation">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="gradient-circle circle-3"></div>
+    <div class="floating-particle particle-1"></div>
+    <div class="floating-particle particle-2"></div>
+    <div class="floating-particle particle-3"></div>
+    <div class="floating-particle particle-4"></div>
+  </div>
+
+  <div class="container">
+    <h1><span class="gradient-text">Sentiment</span> Analysis</h1>
+
+    <form action="/predict" method="post" id="analysis-form">
+      <div class="form-group">
+        <label for="review">Enter your text for analysis:</label>
+        <textarea name="review" id="review" placeholder="Type your review here..." required>{{ review if review else '' }}</textarea>
+      </div>
+      <button type="submit" id="analyze-btn">
+        <span class="btn-text">Analyze Sentiment</span>
+        <div class="btn-loader">
+          <div class="loader-spinner"></div>
+        </div>
+      </button>
+    </form>
+
+    {% if sentiment %}
+    <div class="result-container">
+      <div class="result {{ sentiment.lower() }}">
+        <div class="result-header">
+          <h3>
+            {% if sentiment == "Positive" %}
+            <span class="emoji">😊</span> Positive Sentiment
+            {% else %}
+            <span class="emoji">😞</span> Negative Sentiment
+            {% endif %}
+          </h3>
+          <div class="confidence-score">{{ confidence }}</div>
+        </div>
+
+        <div class="confidence-meter">
+          <div class="meter">
+            <div class="meter-fill" style="width: {{ score * 100 }}%"></div>
+          </div>
+          <div class="meter-labels">
+            <span>Negative</span>
+            <span>Neutral</span>
+            <span>Positive</span>
+          </div>
+        </div>
+
+        <div class="review-preview">
+          <div class="preview-header">Your Text Preview:</div>
+          <p class="preview-content">"{{ review[:200] }}{% if review|length > 200 %}...{% endif %}"</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error-message">
+      <div class="error-icon">⚠️</div>
+      <div class="error-content">
+        <div class="error-title">Analysis Error</div>
+        <p>{{ error }}</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    document.getElementById('analysis-form').addEventListener('submit', function() {
+      const btn = document.getElementById('analyze-btn');
+      btn.classList.add('loading');
+      const btnText = btn.querySelector('.btn-text');
+      btnText.textContent = 'Analyzing...';
+    });
+  </script>
+</body>
+</html>

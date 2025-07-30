@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import numpy as np
 import re
 from gensim.models import Word2Vec
-
+import os
 app = Flask(__name__)
 print("Loading Word2Vec model...")
 word2vec_model = Word2Vec.load("model/word2vec_review.model")
@@ -56,4 +56,5 @@ def predict():
                             review=review)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)

@@ -1,4 +1,4 @@
-Cython
-Flask
-numpy
-gensim
+Flask==2.3.3
+numpy==1.24.4
+gensim==4.3.2
+Cython==3.0.2
